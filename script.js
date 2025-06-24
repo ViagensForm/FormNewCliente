@@ -44,6 +44,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
       const inputFile = document.createElement('input');
       inputFile.type     = 'file';
+      inputFile.name     = 'file';            // <<< define name para envio
       inputFile.multiple = true;
       inputFile.accept   = 'image/*,application/pdf';
       inputFile.style.display = 'none';
