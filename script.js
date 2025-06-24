@@ -1,50 +1,51 @@
+// script.js
+
 window.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('formulario');
-  const qtdInput = document.getElementById('qtd-passageiros');
+  const form            = document.getElementById('formulario');
+  const loader          = document.getElementById('loader-overlay');
+  const modal           = document.getElementById('modal');
+  const okBtn           = document.getElementById('modal-ok');
+  const qtdInput        = document.getElementById('qtd-passageiros');
   const anexosContainer = document.getElementById('anexos-passageiros');
+  const telefoneInput   = document.getElementById('telefone');
+  const cepInput        = document.getElementById('cep');
 
-  // Máscaras de telefone e CEP (inalteradas)
-  const telefoneInput = document.getElementById('telefone');
-  const cepInput      = document.getElementById('cep');
+  // garante que loader e modal comecem ocultos
+  loader.style.display = 'none';
+  modal.style.display  = 'none';
 
+  // máscara de telefone
   telefoneInput.addEventListener('input', e => {
-    let v = e.target.value.replace(/\D/g, '').slice(0,11);
-    if (v.length > 10) {
-      v = v.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
-    } else if (v.length > 5) {
-      v = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
-    } else if (v.length > 2) {
-      v = v.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
-    } else {
-      v = v.replace(/^(\d*)/, '($1');
-    }
+    let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+    if      (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+    else if (v.length >  5) v = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+    else if (v.length >  2) v = v.replace(/^(\d{2})(\d{0,5})/,           '($1) $2');
+    else                     v = v.replace(/^(\d*)/,                    '($1');
     e.target.value = v;
   });
 
+  // máscara de CEP
   cepInput.addEventListener('input', e => {
-    let v = e.target.value.replace(/\D/g, '').slice(0,8);
-    if (v.length > 5) {
-      v = v.replace(/^(\d{5})(\d{1,3}).*/, '$1-$2');
-    }
+    let v = e.target.value.replace(/\D/g, '').slice(0, 8);
+    if (v.length > 5) v = v.replace(/^(\d{5})(\d{1,3}).*/, '$1-$2');
     e.target.value = v;
   });
 
-  // Cria dinamicamente campos de upload, agora usando attachments[] para permitir múltiplos
+  // gera dinamicamente os campos de upload (com preview, drag/drop etc.)
   function criarCamposArquivos(qtd) {
     anexosContainer.innerHTML = '';
     for (let i = 1; i <= qtd; i++) {
       let storedFiles = [];
-      const label = document.createElement('label');
+      const label     = document.createElement('label');
       label.textContent = `Passageiro ${i}:`;
 
       const uploadDiv = document.createElement('div');
       uploadDiv.className = 'upload-area';
 
       const inputFile = document.createElement('input');
-      inputFile.type = 'file';
+      inputFile.type     = 'file';
       inputFile.multiple = true;
-      inputFile.name = 'attachments[]';            // <- array de arquivos
-      inputFile.accept = 'image/*,application/pdf';
+      inputFile.accept   = 'image/*,application/pdf';
       inputFile.style.display = 'none';
 
       const filePreview = document.createElement('div');
@@ -55,27 +56,29 @@ window.addEventListener('DOMContentLoaded', () => {
 
       uploadDiv.append(uploadText, inputFile, filePreview);
 
-      // Interações de clique / drag & drop
+      // abrir seletor
       uploadDiv.addEventListener('click', () => inputFile.click());
-      uploadDiv.addEventListener('dragover', e => {
-        e.preventDefault();
-        uploadDiv.classList.add('dragover');
+
+      // drag & drop
+      uploadDiv.addEventListener('dragover', e => { 
+        e.preventDefault(); 
+        uploadDiv.classList.add('dragover'); 
       });
-      uploadDiv.addEventListener('dragleave', () => {
-        uploadDiv.classList.remove('dragover');
-      });
+      uploadDiv.addEventListener('dragleave', () => uploadDiv.classList.remove('dragover'));
       uploadDiv.addEventListener('drop', e => {
         e.preventDefault();
         uploadDiv.classList.remove('dragover');
-        [...e.dataTransfer.files].forEach(f => {
+        Array.from(e.dataTransfer.files).forEach(f => {
           if (!storedFiles.some(sf => sf.name === f.name && sf.size === f.size)) {
             storedFiles.push(f);
           }
         });
         updateInputFiles();
       });
+
+      // ao selecionar pelo input
       inputFile.addEventListener('change', () => {
-        [...inputFile.files].forEach(f => {
+        Array.from(inputFile.files).forEach(f => {
           if (!storedFiles.some(sf => sf.name === f.name && sf.size === f.size)) {
             storedFiles.push(f);
           }
@@ -87,8 +90,8 @@ window.addEventListener('DOMContentLoaded', () => {
         const dt = new DataTransfer();
         storedFiles.forEach(f => dt.items.add(f));
         inputFile.files = dt.files;
-
         filePreview.innerHTML = '';
+
         if (storedFiles.length === 0) {
           uploadText.style.display = 'block';
         } else {
@@ -109,11 +112,10 @@ window.addEventListener('DOMContentLoaded', () => {
             btn.innerHTML = '×';
             btn.onclick = e => {
               e.stopPropagation();
-              storedFiles = storedFiles.filter(sf =>
-                !(sf.name === file.name && sf.size === file.size)
-              );
+              storedFiles = storedFiles.filter(sf => !(sf.name === file.name && sf.size === file.size));
               updateInputFiles();
             };
+
             item.appendChild(btn);
             filePreview.appendChild(item);
           });
@@ -124,37 +126,40 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // inicializa 1 campo
   criarCamposArquivos(1);
+
+  // se mudar quantidade, recria
   qtdInput.addEventListener('change', () => {
-    let v = parseInt(qtdInput.value, 10);
-    if (isNaN(v) || v < 1) v = 1;
+    let v = parseInt(qtdInput.value) || 1;
+    if (v < 1) v = 1;
     if (v > 30) v = 30;
     qtdInput.value = v;
     criarCamposArquivos(v);
   });
 
-  // Intercepta o submit, envia por fetch e mostra só um alert (sem redirecionar)
-  form.addEventListener('submit', function(e) {
+  // intercepta submit para exibir loader e modal
+  form.addEventListener('submit', async e => {
     e.preventDefault();
-    const fd = new FormData(form);
-
-    fetch(form.action, {
-      method: 'POST',
-      body: fd,
-      // por padrão o fetch segue redirect, mas não muda a URL da página
-    })
-    .then(response => {
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      return response.text();
-    })
-    .then(() => {
-      alert('Formulário enviado com sucesso!');
+    loader.style.display = 'flex';
+    try {
+      const res = await fetch(form.action, {
+        method: form.method,
+        body: new FormData(form)
+      });
+      loader.style.display = 'none';
+      if (!res.ok) throw new Error('Erro no envio');
+      modal.style.display = 'flex';
       form.reset();
       criarCamposArquivos(1);
-    })
-    .catch(err => {
-      console.error(err);
+    } catch (err) {
+      loader.style.display = 'none';
       alert('Falha ao enviar: ' + err.message);
-    });
+    }
+  });
+
+  // fecha o modal ao clicar OK
+  okBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
   });
 });
