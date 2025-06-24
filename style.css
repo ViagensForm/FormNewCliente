@@ -1,0 +1,246 @@
+:root {
+  --vermelho: #e62028;
+  --cinza-claro: #f9f9f9;
+  --cinza-medio: #e0e0e0;
+  --cinza-escuro: #2d2d2d;
+  --branco: #ffffff;
+}
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--cinza-claro);
+  color: var(--cinza-escuro);
+}
+header {
+  background-color: var(--vermelho);
+  padding: 1rem 2rem;
+  color: var(--branco);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo{
+  display: flex;
+  align-items: center;
+}
+.logo h1{
+  margin: 0;
+  
+}
+.logo img { 
+  height: 30px; 
+  margin-right:.5rem;
+}
+
+.social-icons a {
+  margin-left: 1.5rem;
+  text-decoration: none;
+}
+
+.social-icons img{
+  height: 30px; 
+}
+.social-icons a:hover { transform: scale(1.1); }
+
+main {
+  max-width: 700px;
+  margin: 3rem auto;
+  background: var(--branco);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  overflow: hidden;
+  animation: fadeIn 0.6s ease-in-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.form-header {
+  background: var(--vermelho);
+  padding: 2rem;
+  text-align: center;
+  color: var(--branco);
+}
+.form-header h2 { margin: 0; font-size: 2rem; }
+.form-header p {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+form {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+input, textarea {
+  padding: 0.8rem;
+  border: 1px solid var(--cinza-medio);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fff;
+  transition: border 0.2s;
+}
+input:focus, textarea:focus {
+  border-color: var(--vermelho);
+  outline: none;
+}
+
+.highlight-box {
+  background: #f3f3f3;
+  padding: 1rem 1.5rem;
+  border-left: 4px solid var(--vermelho);
+  border-right: 4px solid var(--vermelho);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#box-pessoas { text-align: center; }
+#box-pessoas label {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+#box-pessoas span {
+  font-size: 0.85rem;
+  font-weight: 400;
+  display: block;
+}
+#qtd-passageiros {
+  width: 100px;
+  padding: 0.5rem;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.upload-area {
+  background: var(--cinza-medio);
+  border: 2px dashed var(--vermelho);
+  border-radius: 10px;
+  padding: 2rem;
+  margin: .5rem 0 1rem;
+  text-align: center;
+  font-size: 0.95rem;
+  cursor: pointer;
+  position: relative;
+  background-color: #fff;
+}
+.upload-area.dragover { background-color: #ffe5e5; }
+
+.file-preview {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.file-item {
+  background: #ffffff;
+  border: 1px solid var(--cinza-medio);
+  border-radius: 6px;
+  padding: 0.5rem;
+  position: relative;
+  color: var(--cinza-escuro);
+  font-size: 0.85rem;
+  max-width: 120px;
+  text-align: center;
+}
+.file-item button {
+  background: transparent;
+  border: none;
+  color: var(--vermelho);
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.file-item img {
+  border-radius: 4px;
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto 5px;
+}
+
+button[type="submit"] {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--vermelho);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+button[type="submit"]:hover {
+  background: #b32020;
+}
+
+footer {
+  background: var(--cinza-escuro);
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.85rem;
+}
+.seguranca {
+  font-size: 0.85rem;
+  color: #666;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+/* === Mobile header ajustado === */
+@media (max-width: 700px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 1rem;
+  }
+
+  .logo {
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .logo img {
+    height: 32px;     /* logo menor */
+    margin-right: 0.5rem;
+  }
+
+  .logo h1 {
+    font-size: 1.5rem;  /* texto menor */
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .social-icons {
+    display: none;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+
+  .social-icons a {
+    margin: 0 0.25rem;
+  }
+
+  .social-icons img {
+    height: 24px;     /* ícones menores */
+    width: 24px;
+  }
+}

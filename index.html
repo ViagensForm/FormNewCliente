@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Envio de Documentos - TZ Viagens</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="https://franquia.tzviagens.com.br/wp-content/uploads/2024/06/cropped-favicon-tzviagens-32x32.png" sizes="32x32">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="https://franquia.tzviagens.com.br/wp-content/uploads/2020/02/logo-tzviagens.png" alt="Logo da Agência" />
+      <H1>| Nati Santos</H1>
+    </div>
+    <div class="social-icons">
+      <a href="https://www.instagram.com/tzviagens_natisantos/" target="_blank" title="Instagram">
+        <img src="/Public/Insta.png" alt="" srcset="">
+      </a>
+      <a href="https://wa.me/5511983947555" target="_blank" title="WhatsApp">
+         <img src="/Public/Whats.png" alt="" srcset="">
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="form-header">
+      <h2>Formulário de Envio de Documentos</h2>
+      <p>Nos envie as informações da viagem e documentos dos passageiros</p>
+    </div>
+
+    <form
+      id="formulario"
+      action="https://usebasin.com/f/2814e592d205"
+      method="POST"
+      accept-charset="UTF-8"
+      enctype="multipart/form-data"
+    >
+      <div class="highlight-box">
+        <div id="box-pessoas">
+          <label for="qtd-passageiros">
+            Quantidade de passageiros
+            <span>(incluindo bebês e crianças)</span>
+          </label>
+          <input id="qtd-passageiros"
+                 type="number"
+                 name="qtd-passageiros"
+                 min="1" max="30"
+                 value="1"
+                 required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <h3>Responsável pela reserva</h3>
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required />
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="telefone">Telefone:</label>
+        <input type="tel" id="telefone" name="telefone" required />
+
+        <label for="cep">CEP:</label>
+        <input type="text" id="cep" name="cep" required />
+
+        <label for="endereco">Endereço completo:</label>
+        <textarea id="endereco" name="endereco" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <h3>Documentos</h3>
+        <p>Anexe o RG e CPF ou CNH. Para viagens internacionais, inclua passaporte e visto.</p>
+        <div id="anexos-passageiros"></div>
+      </div>
+
+      <button type="submit">Enviar informações</button>
+      <div class="seguranca">
+        🔒 Suas informações estão seguras conosco. Utilizamos protocolos de segurança ponta a ponta.
+      </div>
+    </form>
+  </main>
+
+  <footer>
+    © 2025 TZ Viagens Nati Santos. Todos os direitos reservados.
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
