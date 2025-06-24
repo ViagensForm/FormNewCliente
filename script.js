@@ -9,10 +9,20 @@ window.addEventListener('DOMContentLoaded', () => {
   const anexosContainer = document.getElementById('anexos-passageiros');
   const telefoneInput   = document.getElementById('telefone');
   const cepInput        = document.getElementById('cep');
+  const emailInput      = document.getElementById('email');
 
   // garante que loader e modal comecem ocultos
   loader.style.display = 'none';
   modal.style.display  = 'none';
+
+  // cria (ou reutiliza) um campo hidden _replyto para o Basin
+  let replyInput = form.querySelector('input[name="_replyto"]');
+  if (!replyInput) {
+    replyInput = document.createElement('input');
+    replyInput.type = 'hidden';
+    replyInput.name = '_replyto';
+    form.appendChild(replyInput);
+  }
 
   // máscara de telefone
   telefoneInput.addEventListener('input', e => {
@@ -31,7 +41,7 @@ window.addEventListener('DOMContentLoaded', () => {
     e.target.value = v;
   });
 
-  // gera dinamicamente os campos de upload (com preview, drag/drop etc.)
+  // gera dinamicamente os campos de upload, agora com name="attachments[]"
   function criarCamposArquivos(qtd) {
     anexosContainer.innerHTML = '';
     for (let i = 1; i <= qtd; i++) {
@@ -44,7 +54,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
       const inputFile = document.createElement('input');
       inputFile.type     = 'file';
-      inputFile.name     = 'file';            // <<< define name para envio
+      inputFile.name     = 'attachments[]';   // <<< envia todos como array
       inputFile.multiple = true;
       inputFile.accept   = 'image/*,application/pdf';
       inputFile.style.display = 'none';
@@ -61,9 +71,9 @@ window.addEventListener('DOMContentLoaded', () => {
       uploadDiv.addEventListener('click', () => inputFile.click());
 
       // drag & drop
-      uploadDiv.addEventListener('dragover', e => { 
-        e.preventDefault(); 
-        uploadDiv.classList.add('dragover'); 
+      uploadDiv.addEventListener('dragover', e => {
+        e.preventDefault();
+        uploadDiv.classList.add('dragover');
       });
       uploadDiv.addEventListener('dragleave', () => uploadDiv.classList.remove('dragover'));
       uploadDiv.addEventListener('drop', e => {
@@ -77,7 +87,7 @@ window.addEventListener('DOMContentLoaded', () => {
         updateInputFiles();
       });
 
-      // ao selecionar pelo input
+      // selecionar via input
       inputFile.addEventListener('change', () => {
         Array.from(inputFile.files).forEach(f => {
           if (!storedFiles.some(sf => sf.name === f.name && sf.size === f.size)) {
@@ -113,7 +123,9 @@ window.addEventListener('DOMContentLoaded', () => {
             btn.innerHTML = '×';
             btn.onclick = e => {
               e.stopPropagation();
-              storedFiles = storedFiles.filter(sf => !(sf.name === file.name && sf.size === file.size));
+              storedFiles = storedFiles.filter(
+                sf => !(sf.name === file.name && sf.size === file.size)
+              );
               updateInputFiles();
             };
 
@@ -127,10 +139,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // inicializa 1 campo
   criarCamposArquivos(1);
 
-  // se mudar quantidade, recria
   qtdInput.addEventListener('change', () => {
     let v = parseInt(qtdInput.value) || 1;
     if (v < 1) v = 1;
@@ -139,9 +149,11 @@ window.addEventListener('DOMContentLoaded', () => {
     criarCamposArquivos(v);
   });
 
-  // intercepta submit para exibir loader e modal
+  // intercepta submit: define _replyto, mostra loader, envia tudo (inclusive attachments[])
   form.addEventListener('submit', async e => {
     e.preventDefault();
+    // passa o e-mail para o Basin usar como reply-to
+    replyInput.value = emailInput.value;
     loader.style.display = 'flex';
     try {
       const res = await fetch(form.action, {
@@ -159,7 +171,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // fecha o modal ao clicar OK
   okBtn.addEventListener('click', () => {
     modal.style.display = 'none';
   });
