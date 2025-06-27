@@ -19,6 +19,7 @@ header {
   justify-content: space-between;
   align-items: center;
 }
+
 .logo{
   display: flex;
   align-items: center;
@@ -307,14 +308,7 @@ body {
   background-color: var(--cinza-claro);
   color: var(--cinza-escuro);
 }
-header {
-  background-color: var(--vermelho);
-  padding: 1rem 2rem;
-  color: var(--branco);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+
 .logo{
   display: flex;
   align-items: center;
