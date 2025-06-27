@@ -12,7 +12,7 @@ body {
   color: var(--cinza-escuro);
 }
 header {
-  background-color: var(--vermelho);
+  background-color: #000;
   padding: 1rem 2rem;
   color: var(--branco);
   display: flex;
